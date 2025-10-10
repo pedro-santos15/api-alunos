@@ -5,6 +5,7 @@ import com.pedrosantos15.alunosapi.model.Aluno;
 import com.pedrosantos15.alunosapi.repository.AlunoRepository;
 import com.pedrosantos15.alunosapi.validator.AlunoValidator;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.logging.Logger;
 @Service
 public class AlunoService {
 
-    private static final Logger logger = (Logger) LoggerFactory.getLogger(AlunoService.class);
+
+    private static final Logger logger = Logger.getLogger(AlunoService.class.getName());
     private AlunoRepository repository;
     private AlunoValidator validator;
 
@@ -41,7 +43,7 @@ public class AlunoService {
     public Aluno salvar(Aluno aluno){
         validator.validarAluno(aluno);
         repository.save(aluno);
-        System.out.println("Aluno salvo!");
+        logger.info("Aluno salvo!");
         return aluno;
     }
 

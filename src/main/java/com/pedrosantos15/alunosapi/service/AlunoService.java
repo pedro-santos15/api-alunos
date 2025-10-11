@@ -1,5 +1,6 @@
 package com.pedrosantos15.alunosapi.service;
 
+import com.pedrosantos15.alunosapi.exceptions.AlunoNotFound;
 import com.pedrosantos15.alunosapi.model.Aluno;
 import com.pedrosantos15.alunosapi.repository.AlunoRepository;
 import com.pedrosantos15.alunosapi.validator.AlunoValidator;
@@ -34,7 +35,7 @@ public class AlunoService {
 
     public Optional<Aluno> buscaPorId(Long id){
         if (repository.findById(id).isEmpty()){
-            logger.warn("Aluno não foi encontrado");
+            throw new AlunoNotFound("Aluno não encontrado");
         }
         return repository.findById(id);
     }
@@ -46,8 +47,9 @@ public class AlunoService {
         return aluno;
     }
 
-    public Aluno atualizar(Aluno aluno){
+    public Aluno atualizar(Long id,Aluno aluno){
         validator.validarAluno(aluno);
+        aluno.setId(id);
         repository.save(aluno);
         logger.info("Aluno atualizado!");
         return aluno;

@@ -34,33 +34,34 @@ public class AlunoService {
     }
 
     public Optional<Aluno> buscaPorId(Long id){
-        if (repository.findById(id).isEmpty()){
+        Optional<Aluno> aluno = repository.findById(id);
+
+        if (aluno.isEmpty()){
             throw new AlunoNotFound("Aluno não encontrado");
         }
-        return repository.findById(id);
+        return aluno;
     }
 
     public Aluno salvar(Aluno aluno){
         validator.validarAluno(aluno);
-        repository.save(aluno);
+        Aluno alunosalvo = repository.save(aluno);
         logger.info("Aluno salvo!");
-        return aluno;
+        return alunosalvo;
     }
 
     public Aluno atualizar(Long id,Aluno aluno){
+        if (!repository.existsById(id)){
+            throw new AlunoNotFound("Aluno não encontrado para atualização");
+        }
         validator.validarAluno(aluno);
         aluno.setId(id);
-        repository.save(aluno);
-        logger.info("Aluno atualizado!");
-        return aluno;
+        return repository.save(aluno);
     }
 
     public void deletar(Long id){
-        if (repository.findById(id).isEmpty()){
-            logger.warn("Usuário não encontrado!");
-            return;
+        if (!repository.existsById(id)){
+            throw new AlunoNotFound("Aluno não encontrada para a deleção");
         }
-
         repository.deleteById(id);
         logger.info("Aluno deletado com sucesso!");
     }

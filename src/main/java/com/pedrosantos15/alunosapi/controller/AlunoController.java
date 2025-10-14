@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/alunos")
+@RequestMapping("/alunos") // -> Isso faz a criaçaõ de um endpoint
 @RestController
 public class AlunoController {
 
@@ -21,12 +21,14 @@ public class AlunoController {
     }
 
     @PostMapping
-    public void salvar(@RequestBody Aluno aluno){
+    public Aluno salvar(@RequestBody Aluno aluno){
+        Aluno alunoSalvo = null;
         try {
-            alunoService.salvar(aluno);
+            alunoSalvo = alunoService.salvar(aluno);
         } catch (IdadeException | NomeException e){
             System.out.println(e.getMessage());
         }
+        return alunoSalvo;
     }
 
     @GetMapping
@@ -47,8 +49,8 @@ public class AlunoController {
     }
 
     @PutMapping("{id}")
-    public void atualizar(@PathVariable("id") Long id,@RequestBody Aluno aluno){
-        alunoService.atualizar(id, aluno);
+    public Aluno atualizar(@PathVariable("id") Long id,@RequestBody Aluno aluno){
+        return alunoService.atualizar(id, aluno);
     }
 
     @DeleteMapping("{id}")

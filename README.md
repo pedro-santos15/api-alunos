@@ -19,16 +19,16 @@ O projeto foi criado como prática dos meus estudos com o ecossistema Spring, ap
 ## 🧱 Estrutura do projeto
 
 src/
- └── main/
-      ├── java/com/pedrosantos15/alunosapi/
-      │     ├── controller/     → Controladores REST (AlunoController)
-      │     ├── service/        → Regras de negócio (AlunoService)
-      │     ├── repository/     → Acesso ao banco (AlunoRepository)
-      │     ├── model/          → Entidades JPA (Aluno)
-      │     ├── validator/      → Validações personalizadas
-      │     └── exceptions/     → Exceções customizadas
-      └── resources/
-            └── application.yaml
+└── main/
+├── java/com/pedrosantos15/alunosapi/
+│ ├── controller/ → Controladores REST (AlunoController)
+│ ├── service/ → Regras de negócio (AlunoService)
+│ ├── repository/ → Acesso ao banco (AlunoRepository)
+│ ├── model/ → Entidades JPA (Aluno)
+│ ├── validator/ → Validações personalizadas
+│ └── exceptions/ → Exceções customizadas
+└── resources/
+└── application.yaml
 
 ---
 

@@ -4,6 +4,7 @@ import com.pedrosantos15.alunosapi.exceptions.AlunoNotFound;
 import com.pedrosantos15.alunosapi.model.Aluno;
 import com.pedrosantos15.alunosapi.repository.AlunoRepository;
 import com.pedrosantos15.alunosapi.validator.AlunoValidator;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -13,17 +14,13 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class AlunoService {
 
 
     private static final Logger logger = LoggerFactory.getLogger(AlunoService.class);
-    private AlunoRepository repository;
-    private AlunoValidator validator;
-
-    public AlunoService(AlunoRepository repository, AlunoValidator validator) {
-        this.repository = repository;
-        this.validator = validator;
-    }
+    private final AlunoRepository repository;
+    private final AlunoValidator validator;
 
     public List<Aluno> listarTodos(){
         List<Aluno> alunos = repository.findAll();

@@ -7,17 +7,17 @@ import jakarta.persistence.*;
 public class Aluno {
 
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Nome")
+    @Column(name = "nome")
     private String nome;
 
-    @Column(name = "Idade")
+    @Column(name = "idade")
     private Integer idade;
 
-    @Column(name = "Curso")
+    @Column(name = "curso")
     private String curso;
 
     public Long getId() {

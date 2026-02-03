@@ -30,13 +30,8 @@ public class AlunoService {
         return alunos;
     }
 
-    public Optional<Aluno> buscaPorId(Long id){
-        Optional<Aluno> aluno = repository.findById(id);
-
-        if (aluno.isEmpty()){
-            throw new AlunoNotFound("Aluno não encontrado");
-        }
-        return aluno;
+    public Aluno buscaPorId(Long id){
+         return repository.findById(id).orElseThrow(() -> new AlunoNotFound("Aluno não encontrado"));
     }
 
     public Aluno salvar(Aluno aluno){
@@ -56,10 +51,8 @@ public class AlunoService {
     }
 
     public void deletar(Long id){
-        if (!repository.existsById(id)){
-            throw new AlunoNotFound("Aluno não encontrada para a deleção");
-        }
-        repository.deleteById(id);
+        Aluno aluno = repository.findById(id).orElseThrow(() -> new AlunoNotFound("Aluno não encontrado"));
+        repository.delete(aluno);
         logger.info("Aluno deletado com sucesso!");
     }
 

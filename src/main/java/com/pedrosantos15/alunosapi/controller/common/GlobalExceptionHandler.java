@@ -2,8 +2,9 @@ package com.pedrosantos15.alunosapi.controller.common;
 
 import com.pedrosantos15.alunosapi.controller.dto.ErroCampo;
 import com.pedrosantos15.alunosapi.controller.dto.ErroResposta;
-import com.pedrosantos15.alunosapi.exceptions.NomeException;
+import com.pedrosantos15.alunosapi.exceptions.AlunoNotFound;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,5 +25,13 @@ public class GlobalExceptionHandler {
                 .map(fe -> new ErroCampo(fe.getField(), fe.getDefaultMessage()))
                 .toList();
         return new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Erro de validação", listaErros);
+    }
+
+    @ExceptionHandler(AlunoNotFound.class)
+    public ResponseEntity<ErroResposta> handleAlunoNotFound(AlunoNotFound e){
+
+        ErroResposta erroResposta = new ErroResposta(HttpStatus.NOT_FOUND.value(), e.getMessage(), List.of());
+
+        return ResponseEntity.status(erroResposta.status()).body(erroResposta);
     }
 }

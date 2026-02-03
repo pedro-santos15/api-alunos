@@ -50,50 +50,31 @@ public class AlunoController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> buscaPorId(@PathVariable("id") Long id) {
-        try {
-            Optional<Aluno> aluno = alunoService.buscaPorId(id);
+    public ResponseEntity<AlunoDto> buscaPorId(@PathVariable("id") Long id) {
+        Aluno aluno = alunoService.buscaPorId(id);
 
-            AlunoDto dto = new AlunoDto(aluno.get().getNome(),
-                    aluno.get().getIdade(),
-                    aluno.get().getCurso());
+        AlunoDto dto = new AlunoDto(
+                aluno.getNome(),
+                aluno.getIdade(),
+                aluno.getCurso());
 
-            return ResponseEntity.ok(dto);
-
-        } catch (AlunoNotFound e) {
-
-            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
-            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
-        }
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<Object> atualizar(@PathVariable("id") Long id, @RequestBody AlunoDto alunoDto) {
-        try {
-            Optional<Aluno> optional = alunoService.buscaPorId(id);
-            Aluno aluno = alunoDto.mapearParaAluno();
-            alunoService.atualizar(id, aluno);
 
-            return ResponseEntity.ok(aluno);
+        Aluno aluno = alunoDto.mapearParaAluno();
+        alunoService.atualizar(id, aluno);
 
-        } catch (AlunoNotFound e){
-            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
-            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
-        }
+        return ResponseEntity.ok(aluno);
 
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deletar(@PathVariable("id") Long id) {
-        try{
             alunoService.deletar(id);
             return ResponseEntity.noContent().build();
-
-        } catch (AlunoNotFound e){
-
-            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
-            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
-        }
     }
 
 

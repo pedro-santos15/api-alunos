@@ -1,5 +1,6 @@
 package com.pedrosantos15.alunosapi.controller;
 
+import com.pedrosantos15.alunosapi.controller.dto.ErroResposta;
 import com.pedrosantos15.alunosapi.exceptions.AlunoNotFound;
 import com.pedrosantos15.alunosapi.exceptions.IdadeException;
 import com.pedrosantos15.alunosapi.exceptions.NomeException;
@@ -29,7 +30,7 @@ public class AlunoController {
     public ResponseEntity<Object> salvar(@RequestBody @Valid AlunoDto alunoDto) {
         try {
             Aluno aluno = alunoDto.mapearParaAluno();
-            Aluno alunoSalvo = alunoService.salvar(aluno);
+            alunoService.salvar(aluno);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
@@ -38,7 +39,8 @@ public class AlunoController {
 
             return ResponseEntity.created(location).build();
         } catch (IdadeException | NomeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
         }
     }
 
@@ -48,25 +50,50 @@ public class AlunoController {
     }
 
     @GetMapping("{id}")
-    public Optional<Aluno> buscaPorId(@PathVariable("id") Long id) {
-        Optional<Aluno> aluno = Optional.empty();
+    public ResponseEntity<Object> buscaPorId(@PathVariable("id") Long id) {
         try {
-            aluno = alunoService.buscaPorId(id);
-        } catch (AlunoNotFound e) {
-            System.out.println(e.getMessage());
-        }
+            Optional<Aluno> aluno = alunoService.buscaPorId(id);
 
-        return aluno;
+            AlunoDto dto = new AlunoDto(aluno.get().getNome(),
+                    aluno.get().getIdade(),
+                    aluno.get().getCurso());
+
+            return ResponseEntity.ok(dto);
+
+        } catch (AlunoNotFound e) {
+
+            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+        }
     }
 
     @PutMapping("{id}")
-    public Aluno atualizar(@PathVariable("id") Long id, @RequestBody Aluno aluno) {
-        return alunoService.atualizar(id, aluno);
+    public ResponseEntity<Object> atualizar(@PathVariable("id") Long id, @RequestBody AlunoDto alunoDto) {
+        try {
+            Optional<Aluno> optional = alunoService.buscaPorId(id);
+            Aluno aluno = alunoDto.mapearParaAluno();
+            alunoService.atualizar(id, aluno);
+
+            return ResponseEntity.ok(aluno);
+
+        } catch (AlunoNotFound e){
+            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+        }
+
     }
 
     @DeleteMapping("{id}")
-    public void deletar(@PathVariable("id") Long id) {
-        alunoService.deletar(id);
+    public ResponseEntity<Object> deletar(@PathVariable("id") Long id) {
+        try{
+            alunoService.deletar(id);
+            return ResponseEntity.noContent().build();
+
+        } catch (AlunoNotFound e){
+
+            ErroResposta erroResposta = ErroResposta.mensagemPadrao(e.getMessage());
+            return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+        }
     }
 
 

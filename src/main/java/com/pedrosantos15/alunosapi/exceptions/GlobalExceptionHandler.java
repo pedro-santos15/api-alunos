@@ -1,8 +1,7 @@
-package com.pedrosantos15.alunosapi.controller.common;
+package com.pedrosantos15.alunosapi.exceptions;
 
-import com.pedrosantos15.alunosapi.controller.dto.ErroCampo;
-import com.pedrosantos15.alunosapi.controller.dto.ErroResposta;
-import com.pedrosantos15.alunosapi.exceptions.AlunoNotFound;
+import com.pedrosantos15.alunosapi.dto.ErroCampo;
+import com.pedrosantos15.alunosapi.dto.ErroResposta;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -31,6 +30,26 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResposta> handleAlunoNotFound(AlunoNotFound e){
 
         ErroResposta erroResposta = new ErroResposta(HttpStatus.NOT_FOUND.value(), e.getMessage(), List.of());
+
+        return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+    }
+
+    @ExceptionHandler(IdadeException.class)
+    public ResponseEntity<ErroResposta> handleIdadeException(IdadeException e){
+
+        ErroResposta erroResposta =
+                new ErroResposta(HttpStatus.BAD_REQUEST.value(),
+                        e.getMessage(), List.of());
+
+        return ResponseEntity.status(erroResposta.status()).body(erroResposta);
+    }
+
+    @ExceptionHandler(NomeException.class)
+    public ResponseEntity<ErroResposta> handleNomeException(NomeException e){
+
+        ErroResposta erroResposta =
+                new ErroResposta(HttpStatus.BAD_REQUEST.value(),
+                        e.getMessage(), List.of());
 
         return ResponseEntity.status(erroResposta.status()).body(erroResposta);
     }

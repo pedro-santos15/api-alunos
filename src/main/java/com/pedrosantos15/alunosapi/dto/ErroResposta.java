@@ -1,4 +1,4 @@
-package com.pedrosantos15.alunosapi.controller.dto;
+package com.pedrosantos15.alunosapi.dto;
 
 import org.springframework.http.HttpStatus;
 

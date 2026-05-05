@@ -1,4 +1,4 @@
-package com.pedrosantos15.alunosapi.controller.dto;
+package com.pedrosantos15.alunosapi.dto;
 
 import com.pedrosantos15.alunosapi.model.Aluno;
 import jakarta.validation.constraints.NotBlank;
@@ -11,13 +11,4 @@ public record AlunoDto(
         Integer idade,
         @NotBlank
         String curso) {
-
-
-    public Aluno mapearParaAluno(){
-        Aluno aluno = new Aluno();
-        aluno.setNome(this.nome);
-        aluno.setIdade(this.idade);
-        aluno.setCurso(this.curso);
-        return aluno;
-    }
 }
